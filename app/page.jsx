@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const themes = {
   spring: {
@@ -49,190 +49,33 @@ const themes = {
   },
 };
 
-const festivals = [
-  {
-    id: "boryeong",
-    name: "보령 머드축제",
-    subtitle: "대천해수욕장에서 시작하는 여름 체험 코스",
-    region: "충남 보령",
-    area: "충청도",
-    date: "2026.07.18 - 07.27",
-    month: 7,
-    day: 18,
-    season: "summer",
-    category: "체험",
-    intents: ["nearby", "oneDay", "kids"],
-    distance: "서울에서 2시간 30분",
-    address: "충남 보령시 대천해수욕장 일원",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=82",
-    imageLabel: "TourAPI 이미지",
-    tags: ["물놀이", "가족", "해변", "야간공연"],
-    overview:
-      "머드 체험, 해변 공연, 야간 불꽃이 이어지는 보령 대표 축제입니다. 축제장과 해수욕장, 해산물 식당을 짧은 동선으로 묶기 좋아요.",
-    lat: 36.305,
-    lng: 126.513,
-    photo: true,
-  },
-  {
-    id: "jinhae",
-    name: "진해 군항제",
-    subtitle: "벚꽃이 도시 전체를 덮는 봄 산책 코스",
-    region: "경남 창원",
-    area: "경상도",
-    date: "2026.04.01 - 04.10",
-    month: 4,
-    day: 3,
-    season: "spring",
-    category: "자연",
-    intents: ["oneDay", "date"],
-    distance: "서울에서 4시간",
-    address: "경남 창원시 진해구 일원",
-    image: "https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1400&q=82",
-    imageLabel: "TourAPI 이미지",
-    tags: ["봄꽃", "도보", "커플", "야경"],
-    overview:
-      "경화역과 여좌천을 중심으로 걷기 좋은 축제입니다. 사진 명소가 많아 오전 산책과 저녁 야경 루트를 함께 구성하기 좋아요.",
-    lat: 35.153,
-    lng: 128.659,
-    photo: true,
-  },
-  {
-    id: "hwacheon",
-    name: "화천 산천어축제",
-    subtitle: "얼음낚시와 겨울 레포츠를 묶은 가족 코스",
-    region: "강원 화천",
-    area: "강원도",
-    date: "2026.01.10 - 02.01",
-    month: 1,
-    day: 12,
-    season: "winter",
-    category: "레포츠",
-    intents: ["nearby", "oneDay", "kids"],
-    distance: "서울에서 2시간",
-    address: "강원도 화천군 화천읍 산천어길",
-    image: "",
-    imageLabel: "이미지 없음",
-    tags: ["얼음낚시", "가족", "겨울", "체험"],
-    overview:
-      "TourAPI 이미지가 없을 때도 축제의 계절감과 핵심 정보를 잃지 않도록 fallback 비주얼을 사용합니다.",
-    lat: 38.106,
-    lng: 127.708,
-    photo: false,
-  },
-  {
-    id: "jarasum",
-    name: "자라섬 재즈페스티벌",
-    subtitle: "북한강 옆에서 보내는 음악 주말",
-    region: "경기 가평",
-    area: "서울·경기",
-    date: "2026.10.02 - 10.05",
-    month: 10,
-    day: 4,
-    season: "autumn",
-    category: "음악",
-    intents: ["nearby", "oneDay", "date"],
-    distance: "서울에서 1시간 30분",
-    address: "경기도 가평군 가평읍 자라섬로 60",
-    image: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1400&q=82",
-    imageLabel: "TourAPI 이미지",
-    tags: ["재즈", "캠핑", "가을", "야외공연"],
-    overview:
-      "공연 시간 전후로 남이섬, 레일바이크, 로컬 막국수 코스를 연결하기 좋은 대표 가을 축제입니다.",
-    lat: 37.819,
-    lng: 127.525,
-    photo: true,
-  },
-  {
-    id: "tongyeong",
-    name: "통영 한산대첩축제",
-    subtitle: "해양 역사와 남해 풍경을 함께 보는 코스",
-    region: "경남 통영",
-    area: "경상도",
-    date: "2026.08.14 - 08.18",
-    month: 8,
-    day: 15,
-    season: "summer",
-    category: "역사",
-    intents: ["kids"],
-    distance: "서울에서 4시간 30분",
-    address: "경남 통영시 세병관길 27 일원",
-    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=82",
-    imageLabel: "TourAPI 이미지",
-    tags: ["해양", "역사", "가족", "케이블카"],
-    overview:
-      "퍼레이드와 해양 공연을 중심으로 통영 케이블카, 중앙시장, 미륵산 전망을 연결할 수 있어요.",
-    lat: 34.845,
-    lng: 128.433,
-    photo: true,
-  },
-  {
-    id: "gangneung-coffee",
-    name: "강릉 커피축제",
-    subtitle: "커피 향과 바다 산책을 잇는 가을 코스",
-    region: "강원 강릉",
-    area: "강원도",
-    date: "2026.10.03 - 10.06",
-    month: 10,
-    day: 5,
-    season: "autumn",
-    category: "푸드",
-    intents: ["oneDay", "date"],
-    distance: "서울에서 2시간 30분",
-    address: "강원도 강릉시 난설헌로 131",
-    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1400&q=82",
-    imageLabel: "TourAPI 이미지",
-    tags: ["커피", "바다", "카페", "가을"],
-    overview:
-      "커피 시음과 안목해변 카페거리, 오죽헌을 묶으면 짧지만 밀도 있는 강릉 1박2일 코스가 됩니다.",
-    lat: 37.771,
-    lng: 128.914,
-    photo: true,
-  },
-  {
-    id: "jeju-fire",
-    name: "제주 들불축제",
-    subtitle: "오름과 로컬 맛집을 잇는 제주 봄 코스",
-    region: "제주 제주시",
-    area: "제주도",
-    date: "2026.03.13 - 03.15",
-    month: 3,
-    day: 14,
-    season: "spring",
-    category: "자연",
-    intents: ["oneDay", "date", "kids"],
-    distance: "제주공항에서 40분",
-    address: "제주특별자치도 제주시 애월읍 봉성리 새별오름 일원",
-    image: "https://images.unsplash.com/photo-1579169825453-8d4b465b0472?auto=format&fit=crop&w=1400&q=82",
-    imageLabel: "TourAPI 이미지",
-    tags: ["오름", "불꽃", "가족", "제주"],
-    overview:
-      "새별오름을 중심으로 열리는 제주 대표 봄 축제입니다. 오름 산책, 해안 카페, 로컬 식당을 함께 묶어 제주다운 하루 코스를 만들기 좋아요.",
-    lat: 33.366,
-    lng: 126.357,
-    photo: true,
-  },
-];
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-const places = [
-  { id: "p1", day: 1, type: "festival", name: "보령 머드축제", time: "10:00", stay: "3시간", note: "머드 체험 + 메인 공연", lat: 36.305, lng: 126.513 },
-  { id: "p2", day: 1, type: "food", name: "꽃게랑 해물탕", time: "13:30", stay: "1시간", note: "꽃게탕 정식 · 18,000원", lat: 36.310, lng: 126.520 },
-  { id: "p3", day: 1, type: "spot", name: "대천해수욕장", time: "15:00", stay: "2시간", note: "해변 산책 · 석양", lat: 36.320, lng: 126.500 },
-  { id: "p4", day: 1, type: "stay", name: "씨사이드 펜션", time: "18:00", stay: "숙박", note: "오션뷰 2인실", lat: 36.350, lng: 126.510 },
-  { id: "p5", day: 2, type: "spot", name: "안면도 꽃지해변", time: "10:00", stay: "2시간", note: "바위섬 일몰 명소", lat: 36.510, lng: 126.330 },
-  { id: "p6", day: 2, type: "food", name: "안면도 조개구이촌", time: "12:30", stay: "1시간", note: "조개구이 + 칼국수", lat: 36.520, lng: 126.350 },
-];
+const areaByCode = {
+  "1": "서울·경기",
+  "2": "서울·경기",
+  "31": "서울·경기",
+  "3": "충청도",
+  "8": "충청도",
+  "33": "충청도",
+  "34": "충청도",
+  "32": "강원도",
+  "4": "경상도",
+  "6": "경상도",
+  "7": "경상도",
+  "35": "경상도",
+  "36": "경상도",
+  "5": "전라도",
+  "37": "전라도",
+  "38": "전라도",
+  "39": "제주도",
+};
 
-const jejuPlaces = [
-  { id: "j1", day: 1, type: "festival", name: "제주 들불축제", time: "10:30", stay: "3시간", note: "새별오름 행사장 산책", lat: 33.390, lng: 126.420 },
-  { id: "j2", day: 1, type: "food", name: "애월 해녀밥상", time: "14:00", stay: "1시간", note: "해산물 정식 · 22,000원", lat: 33.460, lng: 126.310 },
-  { id: "j3", day: 1, type: "spot", name: "협재해변", time: "16:00", stay: "2시간", note: "해변 산책 · 노을", lat: 33.400, lng: 126.240 },
-  { id: "j4", day: 1, type: "stay", name: "애월 스테이", time: "19:00", stay: "숙박", note: "오션뷰 2인실", lat: 33.470, lng: 126.330 },
-  { id: "j5", day: 2, type: "spot", name: "카멜리아힐", time: "10:00", stay: "2시간", note: "동백 정원 산책", lat: 33.280, lng: 126.400 },
-  { id: "j6", day: 2, type: "food", name: "서귀포 고기국수", time: "12:40", stay: "1시간", note: "고기국수 + 몸국", lat: 33.250, lng: 126.560 },
-];
-
-const coursePlacesByFestival = {
-  "jeju-fire": jejuPlaces,
+const placeTypeByContentType = {
+  12: "spot",
+  32: "stay",
+  39: "food",
 };
 
 const transits = ["차로 12분", "도보 8분", "차로 22분", "차로 38분", "차로 25분"];
@@ -310,18 +153,304 @@ const courseIntents = [
   },
 ];
 
+async function loadFestivalData() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.");
+  }
+
+  const festivalRows = await readSupabase("contents", {
+    select: "content_id,content_type_id,title,addr1,addr2,tel,map_x,map_y,area_code,sigungu_code,lcls_systm1,lcls_systm2,lcls_systm3,first_image,first_image2,overview,raw,created_time,modified_time",
+    content_type_id: "eq.15",
+    map_x: "not.is.null",
+    map_y: "not.is.null",
+    order: "modified_time.desc.nullslast,title.asc",
+    limit: "100",
+  });
+
+  if (!festivalRows.length) return [];
+
+  const festivalIds = festivalRows.map((item) => item.content_id);
+  const [metaRows, linkRows] = await Promise.all([
+    readSupabase("festival_meta", {
+      select: "content_id,event_start_date,event_end_date,progress_type,festival_type,event_place,play_time",
+      content_id: `in.(${festivalIds.join(",")})`,
+    }),
+    readSupabase("nearby_places", {
+      select: "festival_id,place_id,distance_m,rank_score",
+      festival_id: `in.(${festivalIds.join(",")})`,
+      order: "festival_id.asc,rank_score.desc,distance_m.asc",
+      limit: "600",
+    }),
+  ]);
+
+  const placeIds = [...new Set(linkRows.map((item) => item.place_id))];
+  const placeRows = placeIds.length
+    ? await readSupabase("contents", {
+        select: "content_id,content_type_id,title,addr1,addr2,tel,map_x,map_y,area_code,sigungu_code,first_image,first_image2,overview,raw,modified_time",
+        content_id: `in.(${placeIds.join(",")})`,
+      })
+    : [];
+
+  const metaById = new Map(metaRows.map((item) => [item.content_id, item]));
+  const placeById = new Map(placeRows.map((item) => [item.content_id, item]));
+  const linksByFestival = new Map();
+
+  linkRows.forEach((link) => {
+    if (!linksByFestival.has(link.festival_id)) linksByFestival.set(link.festival_id, []);
+    linksByFestival.get(link.festival_id).push(link);
+  });
+
+  return festivalRows.map((row) => {
+    const meta = metaById.get(row.content_id) || {};
+    const nearbyPlaces = (linksByFestival.get(row.content_id) || [])
+      .map((link) => {
+        const place = placeById.get(link.place_id);
+        return place ? normalizePlace(place, link) : null;
+      })
+      .filter(Boolean);
+
+    const festival = normalizeFestival(row, meta, nearbyPlaces);
+    festival.coursePlaces = buildCoursePlaces(festival, nearbyPlaces);
+    return festival;
+  });
+}
+
+async function readSupabase(table, params) {
+  const url = new URL(`${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/${table}`);
+  Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+
+  const response = await fetch(url, {
+    headers: {
+      apikey: SUPABASE_KEY,
+      ...(isJwt(SUPABASE_KEY) ? { Authorization: `Bearer ${SUPABASE_KEY}` } : {}),
+      Accept: "application/json",
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`Supabase ${table} request failed: ${response.status} ${detail}`);
+  }
+
+  return response.json();
+}
+
+function isJwt(value) {
+  return typeof value === "string" && value.split(".").length === 3;
+}
+
+function normalizeFestival(row, meta, nearbyPlaces) {
+  const month = monthFromDate(meta.event_start_date) || monthFromTourRaw(row.raw?.eventstartdate) || 7;
+  const day = dayFromDate(meta.event_start_date) || dayFromTourRaw(row.raw?.eventstartdate) || 1;
+  const season = seasonFromMonth(month);
+  const category = inferCategory(row, meta);
+  const address = [row.addr1, row.addr2].filter(Boolean).join(" ") || meta.event_place || "주소 정보 없음";
+  const area = areaByCode[String(row.area_code)] || "전국";
+  const region = formatRegion(row, area);
+  const date = formatDateRange(meta.event_start_date, meta.event_end_date);
+  const image = row.first_image || row.first_image2 || "";
+  const tags = buildTags({ category, season, area, nearbyPlaces });
+
+  return {
+    id: row.content_id,
+    name: row.title,
+    subtitle: `${region}에서 열리는 ${themes[season].label} 축제 코스`,
+    region,
+    area,
+    date,
+    month,
+    day,
+    season,
+    category,
+    intents: inferIntents(category, nearbyPlaces),
+    distance: nearbyPlaces.length ? `주변 후보 ${nearbyPlaces.length}곳` : "주변 후보 준비 중",
+    address,
+    image,
+    imageLabel: image ? "TourAPI 이미지" : "이미지 없음",
+    tags,
+    overview: row.overview || row.raw?.overview || `${address} 기준으로 주변 관광지, 맛집, 숙박 후보를 함께 확인할 수 있어요.`,
+    lat: row.map_y,
+    lng: row.map_x,
+    photo: Boolean(image),
+    nearbyPlaces,
+    coursePlaces: [],
+  };
+}
+
+function normalizePlace(row, link) {
+  const type = placeTypeByContentType[Number(row.content_type_id)] || "spot";
+  const address = [row.addr1, row.addr2].filter(Boolean).join(" ");
+
+  return {
+    id: row.content_id,
+    type,
+    name: row.title,
+    stay: type === "stay" ? "숙박" : type === "food" ? "1시간" : "1시간 30분",
+    note: [address, link?.distance_m ? `${link.distance_m.toLocaleString("ko-KR")}m` : null].filter(Boolean).join(" · "),
+    lat: row.map_y,
+    lng: row.map_x,
+    distanceM: link?.distance_m || 0,
+    rankScore: Number(link?.rank_score || 0),
+    photo: Boolean(row.first_image || row.first_image2),
+  };
+}
+
+function buildCoursePlaces(festival, nearbyPlaces) {
+  const selected = [];
+  const used = new Set();
+  const festivalStop = {
+    id: `${festival.id}-festival`,
+    day: 1,
+    type: "festival",
+    name: festival.name,
+    time: "10:00",
+    stay: "3시간",
+    note: "축제 관람",
+    lat: festival.lat,
+    lng: festival.lng,
+  };
+
+  selected.push(festivalStop);
+  addPlace(selected, used, nearbyPlaces, "food", 1, "13:30");
+  addPlace(selected, used, nearbyPlaces, "spot", 1, "15:00");
+  addPlace(selected, used, nearbyPlaces, "stay", 1, "18:00");
+  addPlace(selected, used, nearbyPlaces, "spot", 2, "10:00");
+  addPlace(selected, used, nearbyPlaces, "food", 2, "12:30");
+
+  nearbyPlaces.forEach((place) => {
+    if (selected.length >= 6 || used.has(place.id)) return;
+    selected.push({ ...place, day: selected.length < 4 ? 1 : 2, time: selected.length < 4 ? "16:30" : "14:00" });
+    used.add(place.id);
+  });
+
+  return selected;
+}
+
+function addPlace(selected, used, places, type, day, time) {
+  const place = places.find((item) => item.type === type && !used.has(item.id));
+  if (!place) return;
+  selected.push({ ...place, day, time });
+  used.add(place.id);
+}
+
+function formatDateRange(start, end) {
+  if (!start && !end) return "일정 확인 중";
+  const startText = formatDate(start);
+  const endText = formatDate(end);
+  if (!endText || startText === endText) return startText;
+  return `${startText} - ${endText.replace(/^\d{4}\./, "")}`;
+}
+
+function formatDate(value) {
+  if (!value) return "";
+  const date = new Date(`${value}T00:00:00+09:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function monthFromDate(value) {
+  if (!value) return null;
+  const month = Number(String(value).slice(5, 7));
+  return Number.isFinite(month) ? month : null;
+}
+
+function dayFromDate(value) {
+  if (!value) return null;
+  const day = Number(String(value).slice(8, 10));
+  return Number.isFinite(day) ? day : null;
+}
+
+function monthFromTourRaw(value) {
+  const next = String(value || "");
+  if (next.length < 6) return null;
+  const month = Number(next.slice(4, 6));
+  return Number.isFinite(month) ? month : null;
+}
+
+function dayFromTourRaw(value) {
+  const next = String(value || "");
+  if (next.length < 8) return null;
+  const day = Number(next.slice(6, 8));
+  return Number.isFinite(day) ? day : null;
+}
+
+function seasonFromMonth(month) {
+  if ([3, 4, 5].includes(month)) return "spring";
+  if ([6, 7, 8].includes(month)) return "summer";
+  if ([9, 10, 11].includes(month)) return "autumn";
+  return "winter";
+}
+
+function formatRegion(row, area) {
+  const raw = row.raw || {};
+  const regionName = raw.addr1 ? String(raw.addr1).split(" ").slice(0, 2).join(" ") : "";
+  return regionName || area;
+}
+
+function inferCategory(row, meta) {
+  const text = `${row.title} ${meta.festival_type || ""} ${row.lcls_systm1 || ""} ${row.lcls_systm2 || ""} ${row.lcls_systm3 || ""}`;
+  if (/재즈|음악|뮤직|공연|콘서트/i.test(text)) return "음악";
+  if (/커피|음식|푸드|먹거리|봄나물|맛/i.test(text)) return "푸드";
+  if (/국가유산|문화재|역사|미디어아트|전통/i.test(text)) return "역사";
+  if (/산천어|레포츠|스포츠|마라톤|낚시/i.test(text)) return "레포츠";
+  if (/꽃|벚꽃|단풍|낙화|오름|자연|정원/i.test(text)) return "자연";
+  return "체험";
+}
+
+function inferIntents(category, nearbyPlaces) {
+  const intents = ["recommended", "oneDay"];
+  if (nearbyPlaces.length) intents.push("nearby");
+  if (["음악", "자연", "푸드"].includes(category)) intents.push("date");
+  if (["체험", "레포츠", "역사"].includes(category)) intents.push("kids");
+  return intents;
+}
+
+function buildTags({ category, season, area, nearbyPlaces }) {
+  const tags = [themes[season].label, category, area];
+  if (nearbyPlaces.some((item) => item.type === "food")) tags.push("맛집");
+  if (nearbyPlaces.some((item) => item.type === "stay")) tags.push("숙박");
+  return [...new Set(tags)].slice(0, 5);
+}
+
 export default function Home() {
   const [screen, setScreen] = useState("explore");
   const [season, setSeason] = useState("summer");
   const [courseIntent, setCourseIntent] = useState("recommended");
-  const [selectedFestival, setSelectedFestival] = useState(festivals[0]);
+  const [festivalsData, setFestivalsData] = useState([]);
+  const [dataStatus, setDataStatus] = useState("loading");
+  const [dataError, setDataError] = useState("");
+  const [selectedFestival, setSelectedFestival] = useState(null);
   const theme = themes[season];
+
+  useEffect(() => {
+    let alive = true;
+
+    loadFestivalData()
+      .then((items) => {
+        if (!alive) return;
+        setFestivalsData(items);
+        setSelectedFestival(items[0] || null);
+        if (items[0]) setSeason(items[0].season);
+        setDataStatus("success");
+      })
+      .catch((error) => {
+        if (!alive) return;
+        setDataError(error.message);
+        setDataStatus("error");
+      });
+
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   function navigate(next, festival) {
     if (festival) {
       setSelectedFestival(festival);
       setSeason(festival.season);
     }
+    if (!festival && (next === "builder" || next === "result") && !selectedFestival) return;
     setScreen(next);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -329,17 +458,17 @@ export default function Home() {
   return (
     <main className="app" style={{ "--accent": theme.accent, "--accent-soft": theme.accentSoft, "--accent-mid": theme.accentMid, "--season-surface": theme.surface, "--hero": theme.hero }}>
       <SeasonParticles kind={theme.particle} />
-      <TopNav screen={screen} courseIntent={courseIntent} onCourseIntent={setCourseIntent} onNavigate={navigate} />
-      {screen === "explore" && <ExploreScreen courseIntent={courseIntent} onCourseIntent={setCourseIntent} onFestival={(festival) => navigate("detail", festival)} />}
-      {screen === "detail" && <DetailScreen festival={selectedFestival} onBack={() => navigate("explore")} onBuild={() => navigate("builder", selectedFestival)} />}
-      {screen === "builder" && <BuilderScreen festival={selectedFestival} onBack={() => navigate("detail")} onDone={() => navigate("result")} />}
-      {screen === "result" && <ResultScreen festival={selectedFestival} onBack={() => navigate("builder")} />}
+      <TopNav screen={screen} courseIntent={courseIntent} onCourseIntent={setCourseIntent} onNavigate={navigate} festivals={festivalsData} />
+      {screen === "explore" && <ExploreScreen festivals={festivalsData} dataStatus={dataStatus} dataError={dataError} courseIntent={courseIntent} onCourseIntent={setCourseIntent} onFestival={(festival) => navigate("detail", festival)} />}
+      {screen === "detail" && selectedFestival && <DetailScreen festival={selectedFestival} onBack={() => navigate("explore")} onBuild={() => navigate("builder", selectedFestival)} />}
+      {screen === "builder" && selectedFestival && <BuilderScreen festival={selectedFestival} onBack={() => navigate("detail")} onDone={() => navigate("result")} />}
+      {screen === "result" && selectedFestival && <ResultScreen festival={selectedFestival} onBack={() => navigate("builder")} />}
       <MobileTabs screen={screen} onNavigate={navigate} />
     </main>
   );
 }
 
-function TopNav({ screen, courseIntent, onCourseIntent, onNavigate }) {
+function TopNav({ screen, courseIntent, onCourseIntent, onNavigate, festivals }) {
   const [openSearch, setOpenSearch] = useState(false);
   const active = (id) => screen === id || (screen === "detail" && id === "explore") || (screen === "result" && id === "builder");
 
@@ -366,7 +495,7 @@ function TopNav({ screen, courseIntent, onCourseIntent, onNavigate }) {
       </button>
       <button className="icon-button" aria-label="알림"><IconBell /></button>
       <button className="mobile-search-button" onClick={() => setOpenSearch(true)} aria-label="검색"><IconSearch /></button>
-      {openSearch && <SearchOverlay onClose={() => setOpenSearch(false)} />}
+      {openSearch && <SearchOverlay festivals={festivals} onClose={() => setOpenSearch(false)} />}
     </header>
   );
 }
@@ -383,7 +512,7 @@ function CourseIntentTabs({ value, onChange, className }) {
   );
 }
 
-function ExploreScreen({ courseIntent, onCourseIntent, onFestival }) {
+function ExploreScreen({ festivals: items, dataStatus, dataError, courseIntent, onCourseIntent, onFestival }) {
   const [view, setView] = useState("list");
   const [query, setQuery] = useState("");
   const [area, setArea] = useState("전체");
@@ -395,7 +524,7 @@ function ExploreScreen({ courseIntent, onCourseIntent, onFestival }) {
 
   const filtered = useMemo(() => {
     const text = query.trim().toLowerCase();
-    return festivals.filter((festival) => {
+    return items.filter((festival) => {
       const seasonLabel = themes[festival.season].label;
       const haystack = `${festival.name} ${festival.region} ${festival.category} ${festival.tags.join(" ")}`.toLowerCase();
       if (courseIntent !== "recommended" && !festival.intents?.includes(courseIntent)) return false;
@@ -405,7 +534,7 @@ function ExploreScreen({ courseIntent, onCourseIntent, onFestival }) {
       if (filterSeason !== "전체" && seasonLabel !== filterSeason) return false;
       return true;
     });
-  }, [query, area, category, filterSeason, courseIntent]);
+  }, [items, query, area, category, filterSeason, courseIntent]);
 
   const clearFilters = () => {
     setArea("전체");
@@ -448,9 +577,11 @@ function ExploreScreen({ courseIntent, onCourseIntent, onFestival }) {
             <button className={view === "calendar" ? "active" : ""} onClick={() => setView("calendar")}><IconCalendar />캘린더</button>
           </div>
         </div>
-        {view === "list" && <FestivalList festivals={filtered} onFestival={onFestival} />}
-        {view === "calendar" && <CalendarView festivals={filtered} selectedDate={selectedDate} setSelectedDate={setSelectedDate} onFestival={onFestival} />}
-        {view === "map" && <MapView festivals={filtered} onFestival={onFestival} />}
+        {dataStatus === "loading" && <DataState type="loading" />}
+        {dataStatus === "error" && <DataState type="error" message={dataError} />}
+        {dataStatus === "success" && view === "list" && <FestivalList festivals={filtered} onFestival={onFestival} />}
+        {dataStatus === "success" && view === "calendar" && <CalendarView festivals={filtered} selectedDate={selectedDate} setSelectedDate={setSelectedDate} onFestival={onFestival} />}
+        {dataStatus === "success" && view === "map" && <MapView festivals={filtered} onFestival={onFestival} />}
       </div>
       {sheetOpen && (
         <BottomSheet title="필터" onClose={() => setSheetOpen(false)}>
@@ -598,18 +729,19 @@ function FestivalMedia({ festival }) {
 }
 
 function CalendarView({ festivals: items, selectedDate, setSelectedDate, onFestival }) {
+  const calendarMonth = items[0]?.month || 7;
   const days = Array.from({ length: 35 }, (_, index) => {
     const day = index - 2;
     return day > 0 && day <= 31 ? day : null;
   });
-  const selected = items.filter((festival) => festival.day === selectedDate || Math.abs(festival.day - selectedDate) <= 1).slice(0, 3);
+  const selected = items.filter((festival) => festival.month === calendarMonth && (festival.day === selectedDate || Math.abs(festival.day - selectedDate) <= 1)).slice(0, 3);
 
   return (
     <div className="calendar-layout">
       <div className="calendar-panel">
         <div className="calendar-title">
           <div>
-            <strong>2026년 7월</strong>
+            <strong>2026년 {calendarMonth}월</strong>
             <span>날짜별 주말 후보 한눈에 보기</span>
           </div>
           <button>오늘</button>
@@ -617,7 +749,7 @@ function CalendarView({ festivals: items, selectedDate, setSelectedDate, onFesti
         <div className="weekdays">{["일", "월", "화", "수", "목", "금", "토"].map((day) => <span key={day}>{day}</span>)}</div>
         <div className="calendar-grid">
           {days.map((day, index) => {
-            const dayFestivals = day ? items.filter((festival) => festival.day === day || (festival.month === 7 && festival.day <= day && festival.day + 5 >= day)) : [];
+            const dayFestivals = day ? items.filter((festival) => festival.month === calendarMonth && (festival.day === day || (festival.day <= day && festival.day + 5 >= day))) : [];
             return (
               <button key={`${day}-${index}`} className={`${day === selectedDate ? "selected" : ""} ${day === 18 || day === 19 ? "weekend-hot" : ""}`} disabled={!day} onClick={() => day && setSelectedDate(day)}>
                 {day && <span>{day}</span>}
@@ -628,7 +760,7 @@ function CalendarView({ festivals: items, selectedDate, setSelectedDate, onFesti
         </div>
       </div>
       <aside className="date-agenda">
-        <span>7월 {selectedDate}일 · 선택한 날짜</span>
+        <span>{calendarMonth}월 {selectedDate}일 · 선택한 날짜</span>
         <h2>이날 가볼 만한 축제</h2>
         {(selected.length ? selected : items.slice(0, 2)).map((festival) => (
           <button key={festival.id} onClick={() => onFestival(festival)}>
@@ -763,6 +895,8 @@ function geoPoint(festival) {
 function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
 
 function DetailScreen({ festival, onBack, onBuild }) {
+  const nearbyPlaces = festival.nearbyPlaces || [];
+
   return (
     <section className="detail-layout">
       <div className="detail-hero">
@@ -799,9 +933,13 @@ function DetailScreen({ festival, onBack, onBuild }) {
         </section>
         <section>
           <h2>주변 추천</h2>
-          <div className="nearby-grid">
-            {places.slice(1, 5).map((place) => <PlaceMini key={place.id} place={place} />)}
-          </div>
+          {nearbyPlaces.length ? (
+            <div className="nearby-grid">
+              {nearbyPlaces.slice(0, 4).map((place) => <PlaceMini key={place.id} place={place} />)}
+            </div>
+          ) : (
+            <EmptyState title="주변 후보가 아직 없어요" description="nearby_places 동기화 후 관광지, 맛집, 숙박 후보가 표시돼요." />
+          )}
         </section>
         <div className="sticky-cta">
           <div>
@@ -821,7 +959,7 @@ function BuilderScreen({ festival, onBack, onDone }) {
   const [count, setCount] = useState(0);
   const [ready, setReady] = useState(false);
   const [day, setDay] = useState(1);
-  const routePlaces = coursePlacesByFestival[festival.id] || places;
+  const routePlaces = festival.coursePlaces || [];
 
   function generate() {
     if (generating) return;
@@ -846,7 +984,7 @@ function BuilderScreen({ festival, onBack, onDone }) {
         <div className="generate-dock">
           {!ready ? (
             <button onClick={generate} disabled={generating}>
-              {generating ? `최적 경로 계산 중 · ${count}/${places.length}` : "코스 자동 생성"}
+              {generating ? `최적 경로 계산 중 · ${count}/${routePlaces.length}` : "코스 자동 생성"}
             </button>
           ) : (
             <span>코스 완성 · 총 {routePlaces.length}곳</span>
@@ -904,7 +1042,8 @@ function TimelineContent({ generating, ready, items }) {
 function ResultScreen({ festival, onBack }) {
   const [day, setDay] = useState(1);
   const [copied, setCopied] = useState(false);
-  const items = places.filter((place) => place.day === day);
+  const routePlaces = festival.coursePlaces || [];
+  const items = routePlaces.filter((place) => place.day === day);
 
   return (
     <section className="result-layout">
@@ -915,17 +1054,17 @@ function ResultScreen({ festival, onBack }) {
           <h1>{festival.name}<br />1박 2일 코스</h1>
         </div>
         <div className="stats-grid">
-          <Stat icon={IconPin} value="6곳" label="총 장소" />
+          <Stat icon={IconPin} value={`${routePlaces.length}곳`} label="총 장소" />
           <Stat icon={IconCalendar} value="1박 2일" label="일정" />
-          <Stat icon={IconCar} value="약 120km" label="이동 거리" />
-          <Stat icon={IconWallet} value="약 25만원" label="예상 비용" />
+          <Stat icon={IconCar} value="주변 기반" label="이동 거리" />
+          <Stat icon={IconWallet} value="TourAPI" label="데이터" />
         </div>
         <div className="og-preview">
           <FestivalMedia festival={festival} />
           <div>
             <span>축제로</span>
             <strong>{festival.name} 1박 2일</strong>
-            <p>{festival.region} · 6곳 · 공유 카드 1200×630</p>
+            <p>{festival.region} · {routePlaces.length}곳 · 공유 카드 1200×630</p>
           </div>
         </div>
         <button className="primary-wide" onClick={() => setCopied(true)}>{copied ? "링크 복사 완료" : "코스 공유하기"}</button>
@@ -951,9 +1090,9 @@ function ResultScreen({ festival, onBack }) {
   );
 }
 
-function SearchOverlay({ onClose }) {
+function SearchOverlay({ festivals: items, onClose }) {
   const [value, setValue] = useState("");
-  const suggestions = festivals.filter((festival) => `${festival.name} ${festival.region} ${festival.category}`.includes(value)).slice(0, 4);
+  const suggestions = items.filter((festival) => `${festival.name} ${festival.region} ${festival.category}`.includes(value)).slice(0, 4);
 
   return (
     <div className="search-overlay">
@@ -1000,12 +1139,32 @@ function BottomSheet({ title, children, onClose }) {
   );
 }
 
-function EmptyState() {
+function DataState({ type, message }) {
+  if (type === "loading") {
+    return (
+      <div className="empty-state">
+        <IconRoute size={42} />
+        <strong>축제 데이터를 불러오는 중이에요</strong>
+        <span>local Supabase에서 TourAPI 축제와 주변 장소를 읽고 있어요.</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="empty-state">
+      <IconInfo size={42} />
+      <strong>데이터를 불러오지 못했어요</strong>
+      <span>{message || "Supabase 로컬 스택과 환경 변수를 확인해 주세요."}</span>
+    </div>
+  );
+}
+
+function EmptyState({ title = "조건에 맞는 축제가 없어요", description = "검색어나 필터 조건을 조금 넓혀보세요." }) {
   return (
     <div className="empty-state">
       <IconHome size={42} />
-      <strong>이번 주는 집에서 쉴까요?</strong>
-      <span>아니면 근처 카페라도 가볼까요? 필터를 조금 넓혀보세요.</span>
+      <strong>{title}</strong>
+      <span>{description}</span>
     </div>
   );
 }

@@ -54,11 +54,12 @@ Build the app as a real fullstack portfolio project using local Supabase in Dock
 
 ## Phase 4: App Data Integration
 
-- [ ] Replace hardcoded festival list with Supabase data.
-- [ ] Replace hardcoded course places with `nearby_places`.
-- [ ] Keep the current UI layout while changing the data source.
-- [ ] Add loading, empty, and error states.
-- [ ] Preserve the existing SVG map fallback until Kakao Map integration.
+- [x] Replace hardcoded festival list with Supabase data.
+- [x] Replace hardcoded course places with `nearby_places`.
+- [x] Keep the current UI layout while changing the data source.
+- [x] Add loading, empty, and error states.
+- [x] Preserve the existing SVG map fallback until Kakao Map integration.
+  - Verified 2026-04-30: `npm run build` passes after app data integration.
 
 ## Phase 5: Course Generator V1
 
@@ -80,4 +81,4 @@ Build the app as a real fullstack portfolio project using local Supabase in Dock
 
 ## Immediate Next Task
 
-Start Phase 4 app data integration by replacing the hardcoded festival and course-place data with local Supabase reads while preserving the current UI layout.
+Run the app locally against Supabase and browser-check the Phase 4 data flow: explore list, detail nearby places, course generation, and result timeline.
