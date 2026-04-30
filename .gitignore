@@ -19,6 +19,9 @@ app/
 public/
 scripts/
 supabase/
+package.json
+package-lock.json
+.env.local.example
 
 # Keep local planning/design artifacts out of the public repo.
 design.md
