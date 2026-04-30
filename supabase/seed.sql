@@ -1,2 +1,0 @@
--- Local seed data goes here.
--- TourAPI data should normally be loaded through scripts so sync behavior stays testable.
