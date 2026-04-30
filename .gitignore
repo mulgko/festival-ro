@@ -1,6 +1,8 @@
 node_modules/
 .next/
 out/
+dist/
+build/
 
 .env
 .env.local
@@ -12,9 +14,18 @@ out/
 supabase/.temp/
 supabase/.branches/
 
+# Keep implementation and product-specific assets local.
+app/
+public/
+scripts/
+supabase/
+
 # Keep local planning/design artifacts out of the public repo.
 design.md
 festival-course-app.md
+task.md
+*.md
+!README.md
 
 *.jpeg
 *.jpg
